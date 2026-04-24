@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import { Bookmark, FolderOpen, ClipboardList, Search, Star, ChevronRight, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Bookmark, FolderOpen, ClipboardList, Search, Star, ChevronRight, X, ChevronLeft } from 'lucide-react';
 import PrivacyPage from './pages/Privacy';
 import TermsPage from './pages/Terms';
 import LicensePage from './pages/License';
+import SupportPage from './pages/Support';
 
 function ComingSoonModal({ onClose }: { onClose: () => void }) {
   return (
@@ -47,23 +48,191 @@ function ComingSoonModal({ onClose }: { onClose: () => void }) {
   );
 }
 
+function useInView(threshold = 0.1) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
+      { threshold }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [threshold]);
+  return { ref, visible };
+}
+
+function HorizontalScreenshots() {
+  const { ref, visible } = useInView(0.15);
+  const images = ['/1.png', '/2.png', '/3.png', '/4.png', '/5.png', '/6.png'];
+  const [start, setStart] = useState(0);
+  const showCount = 4;
+  const maxStart = images.length - showCount;
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const goNext = () => setStart((s) => Math.min(s + 1, maxStart));
+  const goPrev = () => setStart((s) => Math.max(s - 1, 0));
+
+  return (
+    <div ref={ref} className="relative">
+      <div
+        ref={scrollRef}
+        className="overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-4"
+      >
+        <div className="flex gap-1 px-1 min-w-max">
+          {images.map((src, i) => {
+            const inWindow = i >= start && i < start + showCount;
+            return (
+              <div
+                key={src}
+                className={`snap-center flex-shrink-0 transition-all duration-700 ease-out ${
+                  visible && inWindow ? 'opacity-100 translate-y-0 scale-100' : inWindow ? 'opacity-0 translate-y-8 scale-95' : 'opacity-0 scale-95 hidden'
+                }`}
+                style={{ transitionDelay: `${(i - start) * 80}ms` }}
+              >
+                <img
+                  src={src}
+                  alt={`Screenshot ${i + 1}`}
+                  className="w-[220px] sm:w-[260px] lg:w-[300px] rounded-[1.75rem] shadow-xl shadow-black/5"
+                  loading="lazy"
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <button
+        onClick={goPrev}
+        disabled={start === 0}
+        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 z-10 w-12 h-12 rounded-full border border-gray-200 bg-white/90 backdrop-blur shadow-lg flex items-center justify-center text-gray-700 hover:bg-white hover:scale-105 disabled:opacity-0 disabled:scale-75 transition-all"
+        aria-label="Previous"
+      >
+        <ChevronLeft size={24} />
+      </button>
+      <button
+        onClick={goNext}
+        disabled={start >= maxStart}
+        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 z-10 w-12 h-12 rounded-full border border-gray-200 bg-white/90 backdrop-blur shadow-lg flex items-center justify-center text-gray-700 hover:bg-white hover:scale-105 disabled:opacity-0 disabled:scale-75 transition-all"
+        aria-label="Next"
+      >
+        <ChevronRight size={24} />
+      </button>
+
+      <div className="flex items-center justify-center gap-2 mt-6">
+        {images.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setStart(Math.min(i, maxStart))}
+            className={`h-2 rounded-full transition-colors ${
+              i >= start && i < start + showCount ? 'bg-[#0D9488] w-4' : 'bg-gray-300 w-2'
+            }`}
+            aria-label={`Go to slide ${i + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Slide({ children, id }: { children: React.ReactNode; id?: string }) {
+  return (
+    <div
+      id={id}
+      className="w-full lg:min-w-[100vw] lg:h-screen lg:flex lg:items-center lg:justify-center lg:overflow-y-auto hide-scrollbar"
+    >
+      {children}
+    </div>
+  );
+}
+
 function App() {
   const [showIOSModal, setShowIOSModal] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
   const path = window.location.pathname;
+
   if (path === '/privacy') return <PrivacyPage />;
   if (path === '/terms') return <TermsPage />;
   if (path === '/license') return <LicensePage />;
+  if (path === '/support') return <SupportPage />;
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      if (window.innerWidth < 1024) return;
+      const idx = Math.round(el.scrollLeft / window.innerWidth);
+      setActiveSlide(Math.max(0, Math.min(idx, 5)));
+    };
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => el.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    let target = el.scrollLeft;
+    let current = el.scrollLeft;
+    let raf = 0;
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+    const animate = () => {
+      current = lerp(current, target, 0.1);
+      if (Math.abs(target - current) > 0.5) {
+        el.scrollLeft = current;
+        raf = requestAnimationFrame(animate);
+      } else {
+        el.scrollLeft = target;
+        raf = 0;
+      }
+    };
+    const onWheel = (e: WheelEvent) => {
+      if (window.innerWidth < 1024) return;
+      e.preventDefault();
+      target += (e.deltaY + e.deltaX) * 2;
+      target = Math.max(0, Math.min(target, el.scrollWidth - el.clientWidth));
+      if (!raf) raf = requestAnimationFrame(animate);
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => {
+      el.removeEventListener('wheel', onWheel);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  const scrollToSlide = (i: number) => {
+    const el = containerRef.current;
+    if (!el) return;
+    el.scrollTo({ left: i * window.innerWidth, behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (window.innerWidth < 1024) return;
+      if (e.key === 'ArrowRight') scrollToSlide(Math.min(activeSlide + 1, 5));
+      if (e.key === 'ArrowLeft') scrollToSlide(Math.max(activeSlide - 1, 0));
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [activeSlide]);
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen lg:min-h-0 lg:h-screen bg-white text-gray-900 relative">
       {showIOSModal && <ComingSoonModal onClose={() => setShowIOSModal(false)} />}
 
-      {/* ─── Hero ─── */}
-      <section className="relative overflow-hidden bg-[#FAFBFC]">
+      <div
+        ref={containerRef}
+        className="w-full lg:h-screen lg:overflow-x-auto lg:flex lg:flex-nowrap hide-scrollbar"
+      >
+        {/* ─── Hero ─── */}
+        <Slide id="hero">
+          <section className="relative overflow-hidden bg-[#FAFBFC]">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(13,148,136,0.06)_0%,_transparent_60%)]" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-8 pt-20 pb-28 lg:pb-40">
-          <div className="flex flex-col lg:flex-row items-center justify-center gap-14 lg:gap-16">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-8 pt-20 pb-12 lg:pb-20">
+          <div className="flex flex-col lg:flex-row items-center justify-center gap-10 lg:gap-14">
             {/* Left – phone mockup */}
             <div className="relative flex-shrink-0 w-72 sm:w-80 lg:w-[26rem] order-2 lg:order-1">
               <div className="relative z-10">
@@ -128,11 +297,13 @@ function App() {
           </div>
         </div>
       </section>
+        </Slide>
 
-      {/* ─── App Screenshots ─── */}
-      <section className="bg-[#FAFBFC] py-24 lg:py-32">
+        {/* ─── App Screenshots ─── */}
+        <Slide>
+          <section className="bg-[#FAFBFC] py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4 text-gray-900">
               Built for how you browse.
             </h2>
@@ -141,32 +312,14 @@ function App() {
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-end justify-center gap-8 lg:gap-12">
-            {[
-              { img: '/firstscreen.png', title: 'Home Feed', desc: 'All your saves in one scrollable feed.' },
-              { img: '/saveit.png', title: 'Collections', desc: 'Organize into colorful collections.' },
-              { img: '/preview.png', title: 'Preview', desc: 'Rich previews for every link you save.' },
-            ].map((item) => (
-              <div key={item.title} className="flex flex-col items-center w-full sm:w-auto">
-                <div className="relative bg-gray-900 border-[3px] border-gray-700 rounded-[3rem] overflow-hidden shadow-2xl mx-auto w-60 sm:w-64 lg:w-72 h-[480px] sm:h-[520px] lg:h-[576px]">
-                  <div className="absolute top-4 left-1/2 -translate-x-1/2 w-20 h-5 bg-gray-800 rounded-full z-10" />
-                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-950 p-5">
-                    <img src={item.img} alt={item.title} className="w-full h-full object-contain rounded-2xl" />
-                  </div>
-                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-28 h-1.5 bg-gray-600 rounded-full" />
-                </div>
-                <div className="mt-6 text-center max-w-[270px]">
-                  <h3 className="text-lg font-bold mb-1 text-gray-900">{item.title}</h3>
-                  <p className="text-gray-500 text-sm">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <HorizontalScreenshots />
         </div>
       </section>
+        </Slide>
 
-      {/* ─── How It Works ─── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-8 py-24 lg:py-32">
+        {/* ─── How It Works ─── */}
+        <Slide>
+          <section className="max-w-7xl mx-auto px-4 sm:px-8 py-24 lg:py-32">
         <div className="text-center mb-16">
           <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4 text-gray-900">
             Three steps. That's it.
@@ -213,9 +366,11 @@ function App() {
           ))}
         </div>
       </section>
+        </Slide>
 
-      {/* ─── Testimonials ─── */}
-      <section className="bg-[#FAFBFC] py-24 lg:py-32">
+        {/* ─── Testimonials ─── */}
+        <Slide>
+          <section className="bg-[#FAFBFC] py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4 text-gray-900">
@@ -264,9 +419,11 @@ function App() {
           </div>
         </div>
       </section>
+        </Slide>
 
-      {/* ─── CTA Banner ─── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-8 pb-24 lg:pb-32">
+        {/* ─── CTA Banner ─── */}
+        <Slide>
+          <section className="max-w-7xl mx-auto px-4 sm:px-8 pb-24 lg:pb-32">
         <div className="relative bg-[#0D9488] rounded-3xl p-10 sm:p-16 lg:p-20 flex flex-col sm:flex-row items-center gap-10 overflow-hidden">
           <div className="absolute -right-16 -bottom-16 opacity-10">
             <img src="/icon.png" alt="" className="w-64 h-64" />
@@ -287,38 +444,42 @@ function App() {
           </button>
         </div>
       </section>
+        </Slide>
 
-      {/* ─── Footer ─── */}
-      <footer className="border-t border-gray-100 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-14 flex flex-col sm:flex-row items-center justify-between gap-5">
-          <div className="flex items-center gap-3">
-            <img src="/icon.png" alt="Savit" className="w-11 h-11 rounded-xl" />
-            <span className="font-semibold text-base text-gray-900">Savit</span>
+        {/* ─── Footer ─── */}
+        <Slide>
+          <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 py-24 lg:py-0">
+            <div className="bg-white border border-gray-100 rounded-3xl shadow-xl shadow-black/5 p-10 sm:p-14 flex flex-col items-center text-center gap-8">
+              <div className="flex items-center gap-3">
+                <img src="/icon.png" alt="Savit" className="w-14 h-14 rounded-2xl" />
+                <span className="font-bold text-2xl text-gray-900">Savit</span>
+              </div>
+              <p className="text-gray-500 text-lg max-w-md leading-relaxed">
+                Your personal content library. Save links, organize collections, and find anything instantly.
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-6 text-base font-medium text-gray-500">
+                <a href="/privacy" className="hover:text-[#0D9488] transition-colors">Privacy</a>
+                <a href="/terms" className="hover:text-[#0D9488] transition-colors">Terms</a>
+                <a href="/license" className="hover:text-[#0D9488] transition-colors">Licenses</a>
+                <a href="/support" className="hover:text-[#0D9488] transition-colors">Support</a>
+              </div>
+              <div className="h-px w-24 bg-gray-100" />
+              <p className="text-sm text-gray-400">
+                Made by{' '}
+                <a
+                  href="https://rcconstante.dev"
+                  className="text-gray-600 hover:text-gray-900 transition-colors"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Richmond Constante
+                </a>
+              </p>
+            </div>
           </div>
-          <div className="flex items-center gap-8 text-base text-gray-400">
-            <a href="/privacy" className="hover:text-gray-900 transition-colors">
-              Privacy Policy
-            </a>
-            <a href="/terms" className="hover:text-gray-900 transition-colors">
-              Terms
-            </a>
-            <a href="/license" className="hover:text-gray-900 transition-colors">
-              Licenses
-            </a>
-          </div>
-          <p className="text-sm text-gray-400">
-            Made by{' '}
-            <a
-              href="https://rcconstante.dev"
-              className="text-gray-600 hover:text-gray-900 transition-colors"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Richmond Constante
-            </a>
-          </p>
-        </div>
-      </footer>
+        </Slide>
+      </div>
+
     </div>
   );
 }
