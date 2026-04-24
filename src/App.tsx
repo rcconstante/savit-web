@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Bookmark, FolderOpen, ClipboardList, Search, Star, ChevronRight, X } from 'lucide-react';
 import PrivacyPage from './pages/Privacy';
 import TermsPage from './pages/Terms';
+import LicensePage from './pages/License';
 
 function ComingSoonModal({ onClose }: { onClose: () => void }) {
   return (
@@ -51,6 +52,7 @@ function App() {
   const path = window.location.pathname;
   if (path === '/privacy') return <PrivacyPage />;
   if (path === '/terms') return <TermsPage />;
+  if (path === '/license') return <LicensePage />;
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
@@ -299,6 +301,9 @@ function App() {
             </a>
             <a href="/terms" className="hover:text-gray-900 transition-colors">
               Terms
+            </a>
+            <a href="/license" className="hover:text-gray-900 transition-colors">
+              Licenses
             </a>
           </div>
           <p className="text-sm text-gray-400">
