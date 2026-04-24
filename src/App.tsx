@@ -59,15 +59,16 @@ function App() {
       {/* ─── Hero ─── */}
       <section className="relative overflow-hidden bg-[#FAFBFC]">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(13,148,136,0.06)_0%,_transparent_60%)]" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-8 pt-16 pb-24 lg:pb-32">
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-8 pt-20 pb-28 lg:pb-40">
           <div className="flex flex-col lg:flex-row items-center justify-center gap-14 lg:gap-16">
             {/* Left – phone mockup */}
-            <div className="relative flex-shrink-0 w-64 sm:w-72 lg:w-80 order-2 lg:order-1">
+            <div className="relative flex-shrink-0 w-72 sm:w-80 lg:w-[26rem] order-2 lg:order-1">
               <div className="relative z-10">
                 <img
                   src="/hero_phone.png"
                   alt="Savit app on phone"
-                  className="w-full drop-shadow-2xl rounded-[2.5rem]"
+                  className="w-full drop-shadow-2xl"
                 />
               </div>
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] rounded-full bg-[#0D9488]/[0.05] blur-3xl -z-0" />
@@ -75,42 +76,50 @@ function App() {
 
             {/* Right – copy */}
             <div className="text-center lg:text-left max-w-xl w-full px-2 sm:px-0 order-1 lg:order-2">
-              <div className="flex items-center gap-3 justify-center lg:justify-start mb-6">
+              <div className="flex items-center gap-3 justify-center lg:justify-start mb-7">
                 <img src="/icon.png" alt="Savit" className="w-12 h-12 rounded-2xl" />
                 <img src="/savit.png" alt="Savit" className="h-8" />
               </div>
-              <div className="inline-flex items-center gap-2 bg-[#0D9488]/10 backdrop-blur px-5 py-2 rounded-full text-sm font-medium mb-6 text-[#0D9488]">
-                <Bookmark size={16} />
+              <div className="inline-flex items-center gap-2 bg-[#0D9488]/10 backdrop-blur px-5 py-2 rounded-full text-sm font-medium mb-8 text-[#0D9488]">
+                <Bookmark size={18} />
                 Your Personal Content Library
               </div>
-              <h1 className="text-5xl sm:text-6xl lg:text-[4.5rem] font-extrabold tracking-tight leading-[1.05] mb-6 text-gray-900">
+              <h1 className="text-5xl sm:text-6xl lg:text-[5.25rem] font-extrabold tracking-tight leading-[1.05] mb-8 text-gray-900">
                 Save It.
                 <br />
                 <span className="text-[#0D9488]">Find It.</span>
                 <br />
                 Never Lose It.
               </h1>
-              <p className="text-gray-500 text-xl sm:text-2xl leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0">
+              <p className="text-gray-500 text-xl sm:text-2xl leading-relaxed mb-10 max-w-lg mx-auto lg:mx-0">
                 Save links, images, and text from any app. Organize with collections and tags. Find anything instantly.
               </p>
+
+              {/* Store buttons */}
               <div id="download" className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
                 <button
                   onClick={() => setShowIOSModal(true)}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-gray-900 text-white px-8 py-4 rounded-2xl font-semibold text-base hover:bg-gray-800 transition-colors"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-4 bg-gray-900 text-white px-8 py-4 rounded-2xl font-semibold text-base hover:bg-gray-800 transition-colors"
                 >
-                  <svg viewBox="0 0 24 24" className="w-7 h-7 flex-shrink-0" fill="currentColor">
+                  <svg viewBox="0 0 24 24" className="w-8 h-8 flex-shrink-0" fill="currentColor">
                     <path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 21.99 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 21.99C7.79 22.03 6.8 20.68 5.96 19.47C4.25 16.56 2.93 11.3 4.7 7.72C5.57 5.94 7.36 4.82 9.3 4.8C10.6 4.78 11.83 5.64 12.62 5.64C13.41 5.64 14.92 4.59 16.48 4.76C17.14 4.79 18.93 5.03 20.1 6.7C19.98 6.78 17.75 8.08 17.77 10.82C17.8 14.1 20.58 15.17 20.61 15.18C20.58 15.27 20.1 16.88 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/>
                   </svg>
-                  Download on the App Store
+                  <div className="text-left">
+                    <div className="text-xs leading-none opacity-70">Download on the</div>
+                    <div className="text-base leading-tight font-bold">App Store</div>
+                  </div>
                 </button>
                 <a
                   href="#download"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-[#0D9488] text-white px-8 py-4 rounded-2xl font-semibold text-base hover:bg-[#0F766E] transition-colors"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-4 bg-[#0D9488] text-white px-8 py-4 rounded-2xl font-semibold text-base hover:bg-[#0F766E] transition-colors"
                 >
-                  <svg viewBox="0 0 24 24" className="w-7 h-7 flex-shrink-0" fill="currentColor">
+                  <svg viewBox="0 0 24 24" className="w-8 h-8 flex-shrink-0" fill="currentColor">
                     <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-1.4l2.583 1.496c.572.331.572.87 0 1.2l-2.583 1.497-2.606-2.597 2.606-2.596zM5.864 3.465L16.8 9.798l-2.302 2.302-8.634-8.635z"/>
                   </svg>
-                  Get it on Google Play
+                  <div className="text-left">
+                    <div className="text-xs leading-none opacity-70">GET IT ON</div>
+                    <div className="text-base leading-tight font-bold">Google Play</div>
+                  </div>
                 </a>
               </div>
             </div>
