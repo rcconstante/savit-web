@@ -464,7 +464,7 @@ function App() {
               </p>
               <div className="flex items-center gap-4">
                 <a
-                  href="https://apps.apple.com/us/app/savit-save-it-later-bookmark/id6763529989"
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSc0JIORyXh20qQ105wi2Gc3hlAmobqvR-klIKOfITP55nc_eg/viewform?usp=dialog"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-gray-900 text-white px-5 py-2.5 rounded-lg font-medium text-sm hover:bg-gray-800 transition-colors"
