@@ -223,7 +223,7 @@ function App() {
               {/* Store buttons */}
               <div id="download" className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
                 <a
-                  href="https://apps.apple.com/us/app/savit-save-it-later-bookmark/id6763529989"
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSc0JIORyXh20qQ105wi2Gc3hlAmobqvR-klIKOfITP55nc_eg/viewform?usp=dialog"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-4 bg-gray-900 text-white px-8 py-4 rounded-2xl font-semibold text-base hover:bg-gray-800 transition-colors"
@@ -464,7 +464,7 @@ function App() {
               </p>
               <div className="flex items-center gap-4">
                 <a
-                  href="https://docs.google.com/forms/d/e/1FAIpQLSc0JIORyXh20qQ105wi2Gc3hlAmobqvR-klIKOfITP55nc_eg/viewform?usp=dialog"
+                  href="https://apps.apple.com/us/app/savit-save-it-later-bookmark/id6763529989"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-gray-900 text-white px-5 py-2.5 rounded-lg font-medium text-sm hover:bg-gray-800 transition-colors"
