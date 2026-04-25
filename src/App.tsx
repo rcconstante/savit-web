@@ -1,52 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { Bookmark, FolderOpen, ClipboardList, Search, Star, ChevronRight, X, ChevronLeft } from 'lucide-react';
+import { Bookmark, FolderOpen, Search, Star, ChevronRight, ChevronLeft, Shield, Image, Smartphone, Tag, MessageSquareQuote } from 'lucide-react';
 import PrivacyPage from './pages/Privacy';
 import TermsPage from './pages/Terms';
 import LicensePage from './pages/License';
 import SupportPage from './pages/Support';
-
-function ComingSoonModal({ onClose }: { onClose: () => void }) {
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-      onClick={onClose}
-    >
-      <div
-        className="relative bg-white border border-gray-200 rounded-3xl p-10 max-w-sm w-full text-center shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-800 transition-colors"
-          aria-label="Close"
-        >
-          <X size={20} />
-        </button>
-        <div className="w-16 h-16 bg-[#0D9488]/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
-          <Bookmark size={32} className="text-[#0D9488]" />
-        </div>
-        <h2 className="text-2xl font-bold mb-3 text-gray-900">iOS Coming Soon</h2>
-        <p className="text-gray-500 text-base leading-relaxed">
-          Savit for iPhone and iPad is currently in development.
-          <br /><br />
-          In the meantime, try it on Android — your personal content library.
-        </p>
-        <button
-          onClick={onClose}
-          className="mt-8 w-full inline-flex items-center justify-center gap-3 bg-[#0D9488] text-white px-6 py-3.5 rounded-2xl font-semibold text-sm hover:bg-[#0F766E] transition-colors"
-        >
-          Get it on Google Play
-        </button>
-        <button
-          onClick={onClose}
-          className="mt-3 w-full text-gray-400 text-sm py-2 hover:text-gray-600 transition-colors"
-        >
-          Maybe later
-        </button>
-      </div>
-    </div>
-  );
-}
 
 function useInView(threshold = 0.1) {
   const ref = useRef<HTMLDivElement>(null);
@@ -149,7 +106,6 @@ function Slide({ children, id }: { children: React.ReactNode; id?: string }) {
 }
 
 function App() {
-  const [showIOSModal, setShowIOSModal] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const path = window.location.pathname;
@@ -220,8 +176,6 @@ function App() {
 
   return (
     <div className="min-h-screen lg:min-h-0 lg:h-screen bg-white text-gray-900 relative">
-      {showIOSModal && <ComingSoonModal onClose={() => setShowIOSModal(false)} />}
-
       <div
         ref={containerRef}
         className="w-full lg:h-screen lg:overflow-x-auto lg:flex lg:flex-nowrap hide-scrollbar"
@@ -268,8 +222,10 @@ function App() {
 
               {/* Store buttons */}
               <div id="download" className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
-                <button
-                  onClick={() => setShowIOSModal(true)}
+                <a
+                  href="https://apps.apple.com/us/app/savit-save-it-later-bookmark/id6763529989"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-4 bg-gray-900 text-white px-8 py-4 rounded-2xl font-semibold text-base hover:bg-gray-800 transition-colors"
                 >
                   <svg viewBox="0 0 24 24" className="w-8 h-8 flex-shrink-0" fill="currentColor">
@@ -279,9 +235,9 @@ function App() {
                     <div className="text-xs leading-none opacity-70">Download on the</div>
                     <div className="text-base leading-tight font-bold">App Store</div>
                   </div>
-                </button>
+                </a>
                 <a
-                  href="#download"
+                  href="https://bit.ly/4txtOFX"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-4 bg-[#0D9488] text-white px-8 py-4 rounded-2xl font-semibold text-base hover:bg-[#0F766E] transition-colors"
                 >
                   <svg viewBox="0 0 24 24" className="w-8 h-8 flex-shrink-0" fill="currentColor">
@@ -317,166 +273,236 @@ function App() {
       </section>
         </Slide>
 
-        {/* ─── How It Works ─── */}
+        {/* ─── Features Bento ─── */}
         <Slide>
-          <section className="max-w-7xl mx-auto px-4 sm:px-8 py-24 lg:py-32">
-        <div className="text-center mb-16">
+          <section className="max-w-6xl mx-auto px-4 sm:px-8 py-24 lg:py-0">
+        <div className="mb-12">
           <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4 text-gray-900">
-            Three steps. That's it.
+            Save smarter.
           </h2>
-          <p className="text-gray-500 text-lg sm:text-xl max-w-lg mx-auto">
-            Start building your library in under a minute.
+          <p className="text-gray-500 text-lg max-w-lg">
+            Everything you need to capture, organize, and rediscover content.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          {[
-            {
-              step: '01',
-              title: 'Copy Any Link',
-              desc: 'From any app — browser, social, chat. Savit detects it automatically.',
-              icon: ClipboardList,
-            },
-            {
-              step: '02',
-              title: 'Organize',
-              desc: 'Add to collections, tag with colors, or let AI suggest the best fit.',
-              icon: FolderOpen,
-            },
-            {
-              step: '03',
-              title: 'Find Instantly',
-              desc: 'Search by tag, collection, or keyword. Your content, always within reach.',
-              icon: Search,
-            },
-          ].map((item) => (
-            <div
-              key={item.step}
-              className="relative bg-white border border-gray-100 rounded-3xl p-10 text-center"
-            >
-              <div className="text-7xl font-black text-gray-100 absolute top-6 right-8">
-                {item.step}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[minmax(180px,auto)]">
+          {/* Large card — Share Sheet */}
+          <div className="sm:col-span-2 bg-white border border-gray-100 rounded-3xl p-8 flex flex-col justify-between hover:shadow-lg transition-shadow">
+            <div className="flex items-start justify-between mb-4">
+              <div className="w-10 h-10 rounded-xl bg-[#0D9488]/10 flex items-center justify-center">
+                <Smartphone size={20} className="text-[#0D9488]" />
               </div>
-              <div className="w-20 h-20 rounded-3xl bg-[#0D9488]/10 flex items-center justify-center mx-auto mb-7">
-                <item.icon size={34} className="text-[#0D9488]" />
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-gray-900">{item.title}</h3>
-              <p className="text-gray-500 text-base leading-relaxed">{item.desc}</p>
             </div>
-          ))}
+            <div>
+              <h3 className="text-lg font-bold text-gray-900 mb-1">Save from Any App</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">Use the share sheet or clipboard detection to instantly save links, text, and images from any app.</p>
+            </div>
+          </div>
+
+          {/* Collections */}
+          <div className="bg-white border border-gray-100 rounded-3xl p-8 flex flex-col justify-between hover:shadow-lg transition-shadow">
+            <div className="flex items-start justify-between mb-4">
+              <div className="w-10 h-10 rounded-xl bg-[#0D9488]/10 flex items-center justify-center">
+                <FolderOpen size={20} className="text-[#0D9488]" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-gray-900 mb-1">Collections</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">Organize into colorful folders with custom icons, emojis, or photos.</p>
+            </div>
+          </div>
+
+          {/* Rich Previews */}
+          <div className="bg-white border border-gray-100 rounded-3xl p-8 flex flex-col justify-between hover:shadow-lg transition-shadow">
+            <div className="flex items-start justify-between mb-4">
+              <div className="w-10 h-10 rounded-xl bg-[#0D9488]/10 flex items-center justify-center">
+                <Image size={20} className="text-[#0D9488]" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-gray-900 mb-1">Rich Previews</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">Every link gets a beautiful preview with title, image, and description.</p>
+            </div>
+          </div>
+
+          {/* Search — dark accent */}
+          <div className="bg-[#0D9488] rounded-3xl p-8 flex flex-col justify-between text-white hover:shadow-xl transition-shadow">
+            <div className="flex items-start justify-between mb-4">
+              <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                <Search size={20} className="text-white" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-lg font-bold mb-1">Instant Search</h3>
+              <p className="text-white/80 text-sm leading-relaxed">Find anything by title, tag, collection, or keyword in milliseconds.</p>
+            </div>
+          </div>
+
+          {/* Tags */}
+          <div className="bg-white border border-gray-100 rounded-3xl p-8 flex flex-col justify-between hover:shadow-lg transition-shadow">
+            <div className="flex items-start justify-between mb-4">
+              <div className="w-10 h-10 rounded-xl bg-[#0D9488]/10 flex items-center justify-center">
+                <Tag size={20} className="text-[#0D9488]" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-gray-900 mb-1">Color Tags</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">Tag items with colors for instant visual scanning and grouping.</p>
+            </div>
+          </div>
+
+          {/* Offline / Privacy */}
+          <div className="sm:col-span-2 bg-white border border-gray-100 rounded-3xl p-8 flex flex-col justify-between hover:shadow-lg transition-shadow">
+            <div className="flex items-start justify-between mb-4">
+              <div className="w-10 h-10 rounded-xl bg-[#0D9488]/10 flex items-center justify-center">
+                <Shield size={20} className="text-[#0D9488]" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-gray-900 mb-1">100% Private & Offline</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">All your data stays on your device. No cloud, no tracking, no account needed. Your content is yours alone.</p>
+            </div>
+          </div>
         </div>
       </section>
         </Slide>
 
         {/* ─── Testimonials ─── */}
         <Slide>
-          <section className="bg-[#FAFBFC] py-24 lg:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4 text-gray-900">
-              What people are saying
-            </h2>
-          </div>
+          <section className="bg-[#FAFBFC] py-24 lg:py-0 w-full">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8">
+          <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-12 text-gray-900 text-center lg:text-left">
+            What people are saying
+          </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[
-              {
-                name: 'Alex R.',
-                text: "I used to lose links all the time. Now everything is in Savit — organized, tagged, and always findable.",
-                rating: 5,
-              },
-              {
-                name: 'Maria S.',
-                text: 'The collections feature is beautiful. I have one for design inspiration, one for recipes, one for work. Love it.',
-                rating: 5,
-              },
-              {
-                name: 'James K.',
-                text: 'Clean UI, fast search, and the auto-detect from clipboard is a game changer. Best bookmark app I have used.',
-                rating: 5,
-              },
-              {
-                name: 'Priya M.',
-                text: 'Finally an app that understands how I browse. The tag colors make scanning so fast. Highly recommend.',
-                rating: 5,
-              },
-            ].map((review, i) => (
-              <div
-                key={i}
-                className="bg-white border border-gray-100 rounded-3xl p-8"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <span className="font-semibold text-base text-gray-900">{review.name}</span>
-                  <div className="flex gap-1">
-                    {[...Array(review.rating)].map((_, j) => (
-                      <Star key={j} size={18} className="fill-amber-400 text-amber-400" />
-                    ))}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* Featured — left large */}
+            <div className="bg-white border border-gray-100 rounded-3xl p-10 flex flex-col justify-between hover:shadow-lg transition-shadow">
+              <div>
+                <div className="flex items-center gap-2 mb-6">
+                  <MessageSquareQuote size={32} className="text-[#0D9488]/40" />
+                </div>
+                <p className="text-gray-900 text-xl leading-relaxed mb-8">
+                  "I used to lose links all the time. Now everything is in Savit — organized, tagged, and always findable. The collections feature completely changed how I save content from my phone."
+                </p>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-[#0D9488]/10 flex items-center justify-center text-[#0D9488] font-bold text-sm">AR</div>
+                  <div>
+                    <p className="font-semibold text-gray-900 text-sm">Alex R.</p>
+                    <p className="text-gray-400 text-xs">2 days ago</p>
                   </div>
                 </div>
-                <p className="text-gray-500 text-base leading-relaxed">"{review.text}"</p>
+                <div className="flex gap-0.5">
+                  {[...Array(5)].map((_, j) => (
+                    <Star key={j} size={16} className="fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-        </Slide>
+            </div>
 
-        {/* ─── CTA Banner ─── */}
-        <Slide>
-          <section className="max-w-7xl mx-auto px-4 sm:px-8 pb-24 lg:pb-32">
-        <div className="relative bg-[#0D9488] rounded-3xl p-10 sm:p-16 lg:p-20 flex flex-col sm:flex-row items-center gap-10 overflow-hidden">
-          <div className="absolute -right-16 -bottom-16 opacity-10">
-            <img src="/icon.png" alt="" className="w-64 h-64" />
+            {/* Right stack */}
+            <div className="flex flex-col gap-4">
+              <div className="bg-white border border-gray-100 rounded-3xl p-7 flex flex-col justify-between hover:shadow-lg transition-shadow flex-1">
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <p className="font-semibold text-gray-900 text-sm">Best bookmark app</p>
+                    <div className="flex gap-0.5 mt-1">
+                      {[...Array(5)].map((_, j) => (
+                        <Star key={j} size={14} className="fill-amber-400 text-amber-400" />
+                      ))}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-gray-400 text-xs">Maria S.</p>
+                    <p className="text-gray-300 text-xs">1 day ago</p>
+                  </div>
+                </div>
+                <p className="text-gray-500 text-sm leading-relaxed">
+                  "The collections feature is beautiful. I have one for design inspiration, one for recipes, one for work. Love it."
+                </p>
+              </div>
+
+              <div className="bg-white border border-gray-100 rounded-3xl p-7 flex flex-col justify-between hover:shadow-lg transition-shadow flex-1">
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <p className="font-semibold text-gray-900 text-sm">Game changer</p>
+                    <div className="flex gap-0.5 mt-1">
+                      {[...Array(5)].map((_, j) => (
+                        <Star key={j} size={14} className="fill-amber-400 text-amber-400" />
+                      ))}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-gray-400 text-xs">James K.</p>
+                    <p className="text-gray-300 text-xs">4 days ago</p>
+                  </div>
+                </div>
+                <p className="text-gray-500 text-sm leading-relaxed">
+                  "Clean UI, fast search, and the auto-detect from clipboard is a game changer. Best bookmark app I have used."
+                </p>
+              </div>
+            </div>
           </div>
-          <div className="flex-1 relative z-10 text-center sm:text-left">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">
-              Ready to start saving?
-            </h2>
-            <p className="text-white/80 text-lg max-w-lg">
-              Download Savit today and never lose a link again. Free to start, premium features available.
-            </p>
-          </div>
-          <button
-            onClick={() => setShowIOSModal(true)}
-            className="relative z-10 w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-[#0D9488] px-10 py-5 rounded-full font-semibold text-lg hover:bg-gray-100 transition-colors whitespace-nowrap"
-          >
-            Get the App <ChevronRight size={22} />
-          </button>
         </div>
       </section>
         </Slide>
 
         {/* ─── Footer ─── */}
         <Slide>
-          <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 py-24 lg:py-0">
-            <div className="bg-white border border-gray-100 rounded-3xl shadow-xl shadow-black/5 p-10 sm:p-14 flex flex-col items-center text-center gap-8">
-              <div className="flex items-center gap-3">
-                <img src="/icon.png" alt="Savit" className="w-14 h-14 rounded-2xl" />
-                <span className="font-bold text-2xl text-gray-900">Savit</span>
-              </div>
-              <p className="text-gray-500 text-lg max-w-md leading-relaxed">
-                Your personal content library. Save links, organize collections, and find anything instantly.
+          <footer className="w-full max-w-6xl mx-auto px-4 sm:px-8 py-24 lg:py-0 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-16">
+            {/* Left */}
+            <div className="flex-1">
+              <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 mb-4">
+                Your saves.
+                <br />
+                Organized. <span className="text-[#0D9488]">Always.</span>
+              </h2>
+              <p className="text-gray-500 text-lg mb-8">
+                One-time download. Yours forever.
               </p>
-              <div className="flex flex-wrap items-center justify-center gap-6 text-base font-medium text-gray-500">
-                <a href="/privacy" className="hover:text-[#0D9488] transition-colors">Privacy</a>
-                <a href="/terms" className="hover:text-[#0D9488] transition-colors">Terms</a>
-                <a href="/license" className="hover:text-[#0D9488] transition-colors">Licenses</a>
-                <a href="/support" className="hover:text-[#0D9488] transition-colors">Support</a>
-              </div>
-              <div className="h-px w-24 bg-gray-100" />
-              <p className="text-sm text-gray-400">
-                Made by{' '}
+              <div className="flex items-center gap-4">
                 <a
-                  href="https://rcconstante.dev"
-                  className="text-gray-600 hover:text-gray-900 transition-colors"
+                  href="https://apps.apple.com/us/app/savit-save-it-later-bookmark/id6763529989"
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-gray-900 text-white px-5 py-2.5 rounded-lg font-medium text-sm hover:bg-gray-800 transition-colors"
                 >
-                  Richmond Constante
+                  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
+                    <path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 21.99 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 21.99C7.79 22.03 6.8 20.68 5.96 19.47C4.25 16.56 2.93 11.3 4.7 7.72C5.57 5.94 7.36 4.82 9.3 4.8C10.6 4.78 11.83 5.64 12.62 5.64C13.41 5.64 14.92 4.59 16.48 4.76C17.14 4.79 18.93 5.03 20.1 6.7C19.98 6.78 17.75 8.08 17.77 10.82C17.8 14.1 20.58 15.17 20.61 15.18C20.58 15.27 20.1 16.88 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/>
+                  </svg>
+                  App Store
                 </a>
-              </p>
+                <a
+                  href="https://bit.ly/4txtOFX"
+                  className="inline-flex items-center gap-2 bg-gray-900 text-white px-5 py-2.5 rounded-lg font-medium text-sm hover:bg-gray-800 transition-colors"
+                >
+                  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
+                    <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-1.4l2.583 1.496c.572.331.572.87 0 1.2l-2.583 1.497-2.606-2.597 2.606-2.596zM5.864 3.465L16.8 9.798l-2.302 2.302-8.634-8.635z"/>
+                  </svg>
+                  Google Play
+                </a>
+              </div>
             </div>
-          </div>
+
+            {/* Right */}
+            <div className="flex flex-col gap-3 text-sm text-gray-400 lg:text-right">
+              <a href="/privacy" className="hover:text-gray-900 transition-colors">Privacy</a>
+              <a href="/terms" className="hover:text-gray-900 transition-colors">Terms</a>
+              <a href="/license" className="hover:text-gray-900 transition-colors">Licenses</a>
+              <a href="/support" className="hover:text-gray-900 transition-colors">Support</a>
+              <a
+                href="https://rcconstante.dev"
+                className="hover:text-gray-900 transition-colors mt-2 inline-flex items-center gap-1.5 lg:justify-end"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                Web App
+              </a>
+            </div>
+          </footer>
         </Slide>
       </div>
 
