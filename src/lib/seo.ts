@@ -1,4 +1,4 @@
-const SITE_URL = 'https://getsavit.netlify.app';
+const SITE_URL = 'https://savit.rcconstante.dev';
 const BRAND_NAME = 'Savit';
 const AUTHOR_NAME = 'Richmond Constante';
 const AUTHOR_URL = 'https://rcconstante.dev';

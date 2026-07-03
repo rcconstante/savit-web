@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://getsavit.netlify.app/sitemap.xml
+Sitemap: https://savit.rcconstante.dev/sitemap.xml
