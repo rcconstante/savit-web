@@ -4,6 +4,14 @@ import PrivacyPage from './pages/Privacy';
 import TermsPage from './pages/Terms';
 import LicensePage from './pages/License';
 import SupportPage from './pages/Support';
+import { applySeo, HOME_SEO } from './lib/seo';
+
+const HOME_SLIDE_COUNT = 5;
+
+const normalizePath = (path: string) => {
+  if (path.length > 1 && path.endsWith('/')) return path.slice(0, -1);
+  return path;
+};
 
 function useInView(threshold = 0.1) {
   const ref = useRef<HTMLDivElement>(null);
@@ -27,7 +35,6 @@ function HorizontalScreenshots() {
   const [start, setStart] = useState(0);
   const showCount = 4;
   const maxStart = images.length - showCount;
-  const scrollRef = useRef<HTMLDivElement>(null);
 
   const goNext = () => setStart((s) => Math.min(s + 1, maxStart));
   const goPrev = () => setStart((s) => Math.max(s - 1, 0));
@@ -35,7 +42,6 @@ function HorizontalScreenshots() {
   return (
     <div ref={ref} className="relative">
       <div
-        ref={scrollRef}
         className="overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-4"
       >
         <div className="flex gap-1 px-1 min-w-max">
@@ -64,7 +70,7 @@ function HorizontalScreenshots() {
       <button
         onClick={goPrev}
         disabled={start === 0}
-        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 z-10 w-12 h-12 rounded-full border border-gray-200 bg-white/90 backdrop-blur shadow-lg flex items-center justify-center text-gray-700 hover:bg-white hover:scale-105 disabled:opacity-0 disabled:scale-75 transition-all"
+        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 z-10 w-12 h-12 rounded-full border border-gray-200 bg-white/90 shadow-lg flex items-center justify-center text-gray-700 hover:bg-white hover:scale-105 disabled:opacity-0 disabled:scale-75 transition-all"
         aria-label="Previous"
       >
         <ChevronLeft size={24} />
@@ -72,7 +78,7 @@ function HorizontalScreenshots() {
       <button
         onClick={goNext}
         disabled={start >= maxStart}
-        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 z-10 w-12 h-12 rounded-full border border-gray-200 bg-white/90 backdrop-blur shadow-lg flex items-center justify-center text-gray-700 hover:bg-white hover:scale-105 disabled:opacity-0 disabled:scale-75 transition-all"
+        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 z-10 w-12 h-12 rounded-full border border-gray-200 bg-white/90 shadow-lg flex items-center justify-center text-gray-700 hover:bg-white hover:scale-105 disabled:opacity-0 disabled:scale-75 transition-all"
         aria-label="Next"
       >
         <ChevronRight size={24} />
@@ -105,15 +111,13 @@ function Slide({ children, id }: { children: React.ReactNode; id?: string }) {
   );
 }
 
-function App() {
+function HomePage() {
   const [activeSlide, setActiveSlide] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const path = window.location.pathname;
 
-  if (path === '/privacy') return <PrivacyPage />;
-  if (path === '/terms') return <TermsPage />;
-  if (path === '/license') return <LicensePage />;
-  if (path === '/support') return <SupportPage />;
+  useEffect(() => {
+    return applySeo(HOME_SEO);
+  }, []);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -121,7 +125,7 @@ function App() {
     const onScroll = () => {
       if (window.innerWidth < 1024) return;
       const idx = Math.round(el.scrollLeft / window.innerWidth);
-      setActiveSlide(Math.max(0, Math.min(idx, 5)));
+      setActiveSlide(Math.max(0, Math.min(idx, HOME_SLIDE_COUNT - 1)));
     };
     el.addEventListener('scroll', onScroll, { passive: true });
     return () => el.removeEventListener('scroll', onScroll);
@@ -167,7 +171,7 @@ function App() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (window.innerWidth < 1024) return;
-      if (e.key === 'ArrowRight') scrollToSlide(Math.min(activeSlide + 1, 5));
+      if (e.key === 'ArrowRight') scrollToSlide(Math.min(activeSlide + 1, HOME_SLIDE_COUNT - 1));
       if (e.key === 'ArrowLeft') scrollToSlide(Math.max(activeSlide - 1, 0));
     };
     window.addEventListener('keydown', onKey);
@@ -182,9 +186,7 @@ function App() {
       >
         {/* ─── Hero ─── */}
         <Slide id="hero">
-          <section className="relative overflow-hidden bg-[#FAFBFC]">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(13,148,136,0.06)_0%,_transparent_60%)]" />
-
+          <section className="relative w-full overflow-hidden bg-white">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-8 pt-20 pb-12 lg:pb-20">
           <div className="flex flex-col lg:flex-row items-center justify-center gap-10 lg:gap-14">
             {/* Left – phone mockup */}
@@ -196,7 +198,6 @@ function App() {
                   className="w-full drop-shadow-2xl"
                 />
               </div>
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] rounded-full bg-[#0D9488]/[0.05] blur-3xl -z-0" />
             </div>
 
             {/* Right – copy */}
@@ -205,7 +206,7 @@ function App() {
                 <img src="/icon.png" alt="Savit" className="w-12 h-12 rounded-2xl" />
                 <img src="/savit.png" alt="Savit" className="h-8" />
               </div>
-              <div className="inline-flex items-center gap-2 bg-[#0D9488]/10 backdrop-blur px-5 py-2 rounded-full text-sm font-medium mb-8 text-[#0D9488]">
+              <div className="inline-flex items-center gap-2 bg-[#0D9488]/10 px-5 py-2 rounded-full text-sm font-medium mb-8 text-[#0D9488]">
                 <Bookmark size={18} />
                 Your Personal Content Library
               </div>
@@ -257,7 +258,7 @@ function App() {
 
         {/* ─── App Screenshots ─── */}
         <Slide>
-          <section className="bg-[#FAFBFC] py-24 lg:py-32">
+          <section className="w-full bg-white py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
           <div className="text-center mb-12">
             <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4 text-gray-900">
@@ -369,7 +370,7 @@ function App() {
 
         {/* ─── Testimonials ─── */}
         <Slide>
-          <section className="bg-[#FAFBFC] py-24 lg:py-0 w-full">
+          <section className="w-full bg-white py-24 lg:py-0">
         <div className="max-w-6xl mx-auto px-4 sm:px-8">
           <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-12 text-gray-900 text-center lg:text-left">
             What people are saying
@@ -508,6 +509,17 @@ function App() {
 
     </div>
   );
+}
+
+function App() {
+  const path = normalizePath(window.location.pathname);
+
+  if (path === '/privacy') return <PrivacyPage />;
+  if (path === '/terms') return <TermsPage />;
+  if (path === '/license') return <LicensePage />;
+  if (path === '/support') return <SupportPage />;
+
+  return <HomePage />;
 }
 
 export default App;

@@ -1,31 +1,10 @@
 import { useEffect } from 'react';
 import { ChevronLeft } from 'lucide-react';
+import { applySeo, PAGE_SEO } from '../lib/seo';
 
 export default function PrivacyPage() {
   useEffect(() => {
-    document.title = 'Privacy Policy — Savit';
-    const setMeta = (name: string, content: string, prop = false) => {
-      const attr = prop ? 'property' : 'name';
-      let el = document.querySelector(`meta[${attr}="${name}"]`);
-      if (!el) {
-        el = document.createElement('meta');
-        el.setAttribute(attr, name);
-        document.head.appendChild(el);
-      }
-      el.setAttribute('content', content);
-    };
-    setMeta('description', 'Savit Privacy Policy — your saved content stays on your device. We do not collect or sell your data.');
-    setMeta('og:title', 'Privacy Policy — Savit', true);
-    setMeta('og:description', 'Savit never collects, stores, or transmits your saved content without your permission.', true);
-    setMeta('og:url', 'https://getsavit.netlify.app/privacy', true);
-    setMeta('twitter:title', 'Privacy Policy — Savit');
-    setMeta('twitter:description', 'Savit never collects, stores, or transmits your saved content without your permission.');
-    const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) canonical.setAttribute('href', 'https://getsavit.netlify.app/privacy');
-    return () => {
-      document.title = 'Savit — Save It. Find It. Never Lose It.';
-      if (canonical) canonical.setAttribute('href', 'https://getsavit.netlify.app/');
-    };
+    return applySeo(PAGE_SEO.privacy);
   }, []);
 
   return (
@@ -123,7 +102,7 @@ export default function PrivacyPage() {
             <p>
               If you have any questions about this Privacy Policy, you can contact us at:
             </p>
-            <div className="mt-3 bg-gray-50 border border-gray-100 rounded-2xl p-5">
+            <div className="mt-3 border-l-2 border-gray-100 py-2 pl-5">
               <p className="font-semibold text-gray-900">Richmond Constante</p>
               <p className="text-sm text-gray-400 mt-1">
                 Portfolio:{' '}

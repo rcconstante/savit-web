@@ -3,36 +3,83 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Primary SEO -->
-    <title>Savit — Save It. Find It. Never Lose It.</title>
-    <meta name="description" content="Savit is your personal content library. Save links, images, and text from any app. Organize with collections and tags. Find anything instantly." />
-    <meta name="keywords" content="bookmark manager, save links, content organizer, read later, link library, savit app" />
+    <title>Savit | Save It. Find It. Never Lose It.</title>
+    <meta name="description" content="Savit is a personal content library for saving links, images, and text from any app, then organizing everything with collections and tags." />
+    <meta name="keywords" content="Savit, bookmark manager, save links, content organizer, read later app, personal content library, link organizer" />
     <meta name="author" content="Richmond Constante" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="https://getsavit.netlify.app/" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://getsavit.netlify.app/" />
-    <meta property="og:title" content="Savit — Save It. Find It. Never Lose It." />
-    <meta property="og:description" content="Your personal content library. Save links, images, and text. Organize with AI-powered collections and tags." />
-    <meta property="og:image" content="https://getsavit.netlify.app/icon.png" />
-    <meta property="og:image:width" content="512" />
-    <meta property="og:image:height" content="512" />
+    <meta property="og:title" content="Savit | Save It. Find It. Never Lose It." />
+    <meta property="og:description" content="Save links, images, and text from any app. Organize with collections and tags. Find anything instantly." />
+    <meta property="og:image" content="https://getsavit.netlify.app/preview.png" />
+    <meta property="og:image:alt" content="Savit app preview showing saved links and organized collections" />
+    <meta property="og:image:width" content="1045" />
+    <meta property="og:image:height" content="1341" />
     <meta property="og:site_name" content="Savit" />
     <meta property="og:locale" content="en_US" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Savit — Save It. Find It. Never Lose It." />
-    <meta name="twitter:description" content="Your personal content library. Save links, images, and text from any app." />
-    <meta name="twitter:image" content="https://getsavit.netlify.app/icon.png" />
+    <meta name="twitter:title" content="Savit | Save It. Find It. Never Lose It." />
+    <meta name="twitter:description" content="Save links, images, and text from any app. Organize with collections and tags. Find anything instantly." />
+    <meta name="twitter:image" content="https://getsavit.netlify.app/preview.png" />
+    <meta name="twitter:image:alt" content="Savit app preview showing saved links and organized collections" />
 
     <!-- App / Mobile -->
     <meta name="application-name" content="Savit" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="theme-color" content="#0D9488" />
+    <script id="savit-structured-data" type="application/ld+json">
+      [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Savit",
+          "url": "https://getsavit.netlify.app",
+          "description": "A personal content library for saving, organizing, and finding links, images, and text.",
+          "inLanguage": "en-US",
+          "publisher": {
+            "@type": "Person",
+            "name": "Richmond Constante",
+            "url": "https://rcconstante.dev"
+          }
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "Savit",
+          "applicationCategory": "ProductivityApplication",
+          "operatingSystem": "iOS, Android",
+          "description": "Save links, images, and text from any app. Organize with collections and tags. Find anything instantly.",
+          "image": "https://getsavit.netlify.app/preview.png",
+          "url": "https://getsavit.netlify.app",
+          "downloadUrl": "https://apps.apple.com/us/app/savit-save-it-later-bookmark/id6763529989",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "author": {
+            "@type": "Person",
+            "name": "Richmond Constante",
+            "url": "https://rcconstante.dev"
+          },
+          "publisher": {
+            "@type": "Person",
+            "name": "Richmond Constante",
+            "url": "https://rcconstante.dev"
+          }
+        }
+      ]
+    </script>
   </head>
   <body>
     <div id="root"></div>

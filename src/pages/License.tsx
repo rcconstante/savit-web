@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
+import { applySeo, PAGE_SEO } from '../lib/seo';
 
 const licenses = [
   {
@@ -98,6 +100,10 @@ copies or substantial portions of the Software.`,
 ];
 
 export default function LicensePage() {
+  useEffect(() => {
+    return applySeo(PAGE_SEO.license);
+  }, []);
+
   return (
     <div className="min-h-screen bg-white text-gray-900">
       <div className="max-w-3xl mx-auto px-6 py-16">
@@ -116,8 +122,8 @@ export default function LicensePage() {
 
         <div className="space-y-8">
           {licenses.map((lib) => (
-            <div key={lib.name} className="border border-gray-200 rounded-2xl overflow-hidden">
-              <div className="flex items-center justify-between px-6 py-4 bg-gray-50 border-b border-gray-200">
+            <section key={lib.name} className="border-t border-gray-200 pt-6">
+              <div className="flex items-center justify-between gap-4 pb-4">
                 <div className="flex items-center gap-3">
                   <h2 className="font-semibold text-base">{lib.name}</h2>
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#0D9488]/10 text-[#0D9488]">
@@ -133,10 +139,10 @@ export default function LicensePage() {
                   Source <ExternalLink size={14} />
                 </a>
               </div>
-              <pre className="px-6 py-5 text-xs text-gray-600 leading-relaxed overflow-x-auto whitespace-pre-wrap bg-white">
+              <pre className="border-t border-gray-100 pt-4 text-xs text-gray-600 leading-relaxed overflow-x-auto whitespace-pre-wrap">
                 {lib.text}
               </pre>
-            </div>
+            </section>
           ))}
         </div>
 

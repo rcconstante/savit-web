@@ -1,31 +1,10 @@
 import { useEffect } from 'react';
 import { ChevronLeft } from 'lucide-react';
+import { applySeo, PAGE_SEO } from '../lib/seo';
 
 export default function TermsPage() {
   useEffect(() => {
-    document.title = 'Terms of Service — Savit';
-    const setMeta = (name: string, content: string, prop = false) => {
-      const attr = prop ? 'property' : 'name';
-      let el = document.querySelector(`meta[${attr}="${name}"]`);
-      if (!el) {
-        el = document.createElement('meta');
-        el.setAttribute(attr, name);
-        document.head.appendChild(el);
-      }
-      el.setAttribute('content', content);
-    };
-    setMeta('description', 'Savit Terms of Service — read our terms for using the Savit content library app.');
-    setMeta('og:title', 'Terms of Service — Savit', true);
-    setMeta('og:description', 'Read the Savit Terms of Service for the content saving and organization app.', true);
-    setMeta('og:url', 'https://getsavit.netlify.app/terms', true);
-    setMeta('twitter:title', 'Terms of Service — Savit');
-    setMeta('twitter:description', 'Read the Savit Terms of Service for the content saving and organization app.');
-    const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) canonical.setAttribute('href', 'https://getsavit.netlify.app/terms');
-    return () => {
-      document.title = 'Savit — Save It. Find It. Never Lose It.';
-      if (canonical) canonical.setAttribute('href', 'https://getsavit.netlify.app/');
-    };
+    return applySeo(PAGE_SEO.terms);
   }, []);
 
   return (
@@ -140,7 +119,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-bold text-gray-900 mb-3">9. Contact</h2>
             <p>For questions about these Terms, contact:</p>
-            <div className="mt-3 bg-gray-50 border border-gray-100 rounded-2xl p-5">
+            <div className="mt-3 border-l-2 border-gray-100 py-2 pl-5">
               <p className="font-semibold text-gray-900">Richmond Constante</p>
               <p className="text-sm text-gray-400 mt-1">
                 Portfolio:{' '}
